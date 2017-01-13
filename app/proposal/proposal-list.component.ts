@@ -1,20 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 import { Proposal } from './proposal';
+import { ProposalService } from './proposal.service';
 
 @Component({
 	moduleId: module.id,
 	selector: 'proposal-list',
 	templateUrl: 'proposal-list.component.html',
-	styleUrls: ['proposal-list.component.css']
+	styleUrls: ['proposal-list.component.css'],
+	providers: [ ProposalService ]
 })
-export class ProposalListComponent {
-	proposalOne: Proposal = new Proposal(15,'ABC Company', 'http://mb-portfolio', 'RoR',150, 120, 15, 'jonas@jonas.lt')
-	proposalTwo: Proposal = new Proposal(99, 'ABC Company', 'http://mb-portfolio', 'RoR',150, 120, 15, 'jonas@jonas.lt')
-	proposalThree: Proposal = new Proposal(335,'ABC Company', 'http://mb-portfolio', 'RoR',150, 120, 15, 'jonas@jonas.lt')
+export class ProposalListComponent implements OnInit {
+	proposals: Proposal[];
+	errorMessage: string;
+	mode = "Observable";
 
-proposals: Proposal[] = [
-this.proposalOne,
-this.proposalTwo,
-this.proposalThree
-	]
+constructor(
+	private proposalService: ProposalService
+	){}
+
+	ngOnInit(){
+		let timer = Observable.timer(0, 5000);
+		timer.subscribe(() => this.getProposal());
+	}
+
+	getProposal(){
+		this.proposalService.getProposals()
+				.subscribe(
+					proposals => this.proposals = proposals,
+					error => this.errorMessage = <any>error
+					);
+	}
 }
