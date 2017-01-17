@@ -24,6 +24,13 @@ var ProposalService = (function () {
     ProposalService.prototype.getProposal = function (id) {
         return this.http.get(this.proposalsUrl + "/" + id + '.json');
     };
+    ProposalService.prototype.createProposal = function (proposal) {
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        var options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post(this.proposalsUrl, JSON.stringify(proposal), {
+            headers: headers
+        }).map(function (res) { return res.json(); });
+    };
     ProposalService.prototype.handlerError = function (error) {
         var errMsg;
         if (error instanceof http_1.Response) {
