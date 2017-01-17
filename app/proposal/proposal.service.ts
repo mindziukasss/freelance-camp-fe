@@ -8,7 +8,7 @@ import { Proposal } from './proposal';
 @Injectable()
 export class ProposalService {
 
-	private proposalsUrl = 'http://localhost:5000/proposals.json';
+	private proposalsUrl = 'http://localhost:5000/proposals';
 
 constructor (
 	private http: Http
@@ -20,7 +20,9 @@ getProposals(): Observable<Proposal[]> {
 									.catch(this.handlerError);
 	}
 
-
+getProposal(id: number){
+	return this.http.get(this.proposalsUrl + "/" + id + '.json');
+}
 
 private handlerError (error: Response | any) {
 
